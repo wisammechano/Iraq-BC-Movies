@@ -13,7 +13,7 @@ export default function NavBar(props) {
         activeGenre={props.activeGenre}
         setGenre={props.setGenre}
       />
-      <SearchBox onSearch={() => {}} onResult={props.setMovies} />
+      <SearchBox onResult={props.setMovies} />
     </Navbar>
   );
 }

@@ -3,6 +3,7 @@ import "./styles.css";
 import Navbar from "./comps/Navbar";
 import API from "./API";
 import MoviesGrid from "./comps/MoviesGrid";
+import SearchBox from "./comps/SearchBox";
 
 export default function App() {
   const [genres, setGenres] = useState([{ id: -1, name: "All" }]);
@@ -28,6 +29,7 @@ export default function App() {
           m => m.genre_ids.includes(activeGenre) || activeGenre === -1
         )}
       />
+      <SearchBox onResult={setMovies} />
     </div>
   );
 }
