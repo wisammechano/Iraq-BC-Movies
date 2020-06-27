@@ -5,13 +5,13 @@ import API from "./API";
 import MoviesGrid from "./comps/MoviesGrid";
 
 export default function App() {
-  const [genres, setGenres] = useState([]);
+  const [genres, setGenres] = useState([{ id: -1, name: "All" }]);
   const [movies, setMovies] = useState([]);
   const [activeGenre, setActiveGenre] = useState(-1);
 
   useEffect(() => {
     API.genres().then(res => {
-      setGenres(res.genres);
+      setGenres([{ id: -1, name: "All" }, ...res.genres]);
     });
   }, []);
 
@@ -25,7 +25,7 @@ export default function App() {
       />
       <MoviesGrid
         movies={movies.filter(
-          m => m.genres.includes(activeGenre) || activeGenre === -1
+          m => m.genre_ids.includes(activeGenre) || activeGenre === -1
         )}
       />
     </div>
