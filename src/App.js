@@ -3,12 +3,13 @@ import "./styles.css";
 import Navbar from "./comps/Navbar";
 import API from "./API";
 import MoviesGrid from "./comps/MoviesGrid";
-import SearchBox from "./comps/SearchBox";
+import MoviePage from "./MoviePage";
 
 export default function App() {
   const [genres, setGenres] = useState([{ id: -1, name: "All" }]);
   const [movies, setMovies] = useState([]);
   const [activeGenre, setActiveGenre] = useState(-1);
+  const [selectedMovie, setSelectedMovie] = useState(null);
 
   useEffect(() => {
     API.genres().then(res => {
@@ -24,12 +25,20 @@ export default function App() {
         setGenre={setActiveGenre}
         setMovies={setMovies}
       />
-      <MoviesGrid
-        movies={movies.filter(
-          m => m.genre_ids.includes(activeGenre) || activeGenre === -1
-        )}
-      />
-      <SearchBox onResult={setMovies} />
+      {selectedMovie == null && (
+        <MoviesGrid
+          movies={movies.filter(
+            m => m.genre_ids.includes(activeGenre) || activeGenre === -1
+          )}
+          onItemClick={id => setSelectedMovie(id)}
+        />
+      )}
+      {selectedMovie != null && (
+        <MoviePage
+          back={() => setSelectedMovie(null)}
+          movie_id={selectedMovie}
+        />
+      )}
     </div>
   );
 }

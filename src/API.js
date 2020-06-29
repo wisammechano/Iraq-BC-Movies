@@ -5,7 +5,8 @@ const API = {
   genres: () => json(`/genre/movie/list`),
   nowPlaying: () => json(`/movie/now_playing`),
   popular: () => json("/movie/popular"),
-  search: query => json("/search/movie", query)
+  search: query => json("/search/movie", query),
+  movie: async movie_id => await json(`/movie/${movie_id}`)
 };
 
 function json(path, query) {
