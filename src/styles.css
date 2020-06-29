@@ -2,3 +2,9 @@
   font-family: sans-serif;
   text-align: center;
 }
+.card-shadow {
+  transition: all 0.3s ease-in-out;
+}
+.card-shadow:hover {
+  transform: scale(1.05, 1.05);
+}
