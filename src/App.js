@@ -2,7 +2,8 @@ import React, { useEffect, useContext } from "react";
 import "./styles.css";
 import Navbar from "./comps/Navbar";
 import API from "./API";
-import MoviesGrid from "./comps/MoviesGrid";
+import HomePage from "./HomePage";
+import SearchPage from "./SearchPage";
 import MoviePage from "./MoviePage";
 import Context from "./ContextProvider";
 import { BrowserRouter, Switch, Route } from "react-router-dom";
@@ -26,8 +27,8 @@ export default function App() {
         <Navbar />
         <Switch>
           <Route path="/movies/:id-:title" component={MoviePage} />
-          <Route path="/search/:query" component={MoviesGrid} />
-          <Route path="/" component={MoviesGrid} />
+          <Route path="/search/:query" component={SearchPage} />
+          <Route path="/" component={HomePage} />
         </Switch>
       </BrowserRouter>
     </div>

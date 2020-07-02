@@ -1,23 +1,33 @@
-import React, { useState } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { Form, Button, FormControl, Spinner } from "react-bootstrap";
 
 import API from "../API";
+import Context from "../ContextProvider";
+import { useHistory } from "react-router-dom";
 
 export default function SearchBox(props) {
+  const [state, dispatch] = useContext(Context);
   const [query, setQuery] = useState("");
-  const [isLoading, setLoading] = useState(true);
+  const [isLoading, setLoading] = useState(false);
+  const history = useHistory();
+  const search = async query => {
+    if (query) {
+      setLoading(true);
+      history.push("/search/" + query);
+      const res = await API.search(query);
+      setLoading(false);
+      dispatch({ type: "SET_RESULTS", results: res.results });
+    }
+  };
 
   const handleSubmit = e => {
     e.preventDefault();
-    if (query) {
-      setLoading(true);
-      props.onSearch && props.onSearch();
-      API.search(query).then(res => {
-        setLoading(false);
-        props.onResult(res.results);
-      });
-    }
+    search(query);
   };
+
+  useEffect(() => {
+    state.searchQuery && search(state.searchQuery);
+  }, [state.searchQuery]);
 
   return (
     <Form inline onSubmit={handleSubmit}>
@@ -25,6 +35,7 @@ export default function SearchBox(props) {
         type="text"
         placeholder="Search"
         className="mr-sm-2"
+        defaultValue={state.searchQuery}
         onChange={e => setQuery(e.target.value)}
       />
       <Button type="submit" variant="outline-info">
