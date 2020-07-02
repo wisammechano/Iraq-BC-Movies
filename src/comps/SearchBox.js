@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext, useEffect, useCallback } from "react";
 import { Form, Button, FormControl, Spinner } from "react-bootstrap";
 
 import API from "../API";
@@ -7,18 +7,25 @@ import { useHistory } from "react-router-dom";
 
 export default function SearchBox(props) {
   const [state, dispatch] = useContext(Context);
+
+  // these state entries are to manage local ui
   const [query, setQuery] = useState("");
   const [isLoading, setLoading] = useState(false);
+
   const history = useHistory();
-  const search = async query => {
-    if (query) {
-      setLoading(true);
-      history.push("/search/" + query);
-      const res = await API.search(query);
-      setLoading(false);
-      dispatch({ type: "SET_RESULTS", results: res.results });
-    }
-  };
+
+  const search = useCallback(
+    async query => {
+      if (query) {
+        setLoading(true);
+        history.push("/search/" + query);
+        const res = await API.search(query);
+        setLoading(false);
+        dispatch({ type: "SET_RESULTS", results: res.results });
+      }
+    },
+    [history, dispatch]
+  );
 
   const handleSubmit = e => {
     e.preventDefault();
@@ -27,7 +34,7 @@ export default function SearchBox(props) {
 
   useEffect(() => {
     state.searchQuery && search(state.searchQuery);
-  }, [state.searchQuery]);
+  }, [state.searchQuery, search]);
 
   return (
     <Form inline onSubmit={handleSubmit}>
